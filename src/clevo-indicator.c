@@ -156,6 +156,13 @@ struct {
 
 static pid_t parent_pid = 0;
 
+
+static int maxTempWindowCelsius = 90;
+
+
+static int minTempWindowCelsius = 40;
+
+
 void autoset_cpu_gpu()
 {
     struct sched_param param;
@@ -263,11 +270,14 @@ void autoset_cpu_gpu()
             int setDuty[2];
             for (int i = 0;i < 2;i++)
             {
-                if (avg[i] <= 40) setDuty[i] = 0;
-                else if (avg[i] <= 45) setDuty[i] = 15;
-                else if (avg[i] <= 75) setDuty[i] = avg[i] - 30;
-                else if (avg[i] <= 90) setDuty[i] = (avg[i] - 75) * 3 + 45;
-                else setDuty[i] = 100;
+                if ( avg[i] <= minTempWindowCelsius ) setDuty[i] = 0;
+                else if (avg[i] >= maxTempWindowCelsius ) setDuty[i] = 100;
+                else
+		{
+		    int dact = avg[i] - minTempWindowCelsius;
+		    int dscl = maxTempWindowCelsius - minTempWindowCelsius;
+		    setDuty[i] = 100 * ( dact * dact ) / ( dscl * dscl );
+		}
             }
 
             if (ctrl_setting_offset_cpu) setDuty[0] += ctrl_setting_offset_cpu;
@@ -495,7 +505,19 @@ DO NOT MANIPULATE OR QUERY EC I/O PORTS WHILE THIS PROGRAM IS RUNNING.\n\
         }
         close(io_fd);
     }
-    else if (strcmp(argv[1], "auto") == 0) {
+    else if (strcmp(argv[1], "auto") == 0) { // Similar to default in original repo from which this was forked.
+        minTempWindowCelsius = 40;
+	maxTempWindowCelsius = 90;
+        autoset_cpu_gpu();
+    }
+    else if (strcmp(argv[1], "autoHot") == 0) { // Stays quiet until close to temperature limit, and then switches on.  WARNING: this can be quieter, but can also cause the bottom of the laptop to become scalding-hot
+        minTempWindowCelsius = 70;
+	maxTempWindowCelsius = 90;
+        autoset_cpu_gpu();
+    }
+    else if (strcmp(argv[1], "autoCool") == 0) { // Attempts to keep laptop cool enough that you can keep it on your lap, but this requires higher fan speeds
+        minTempWindowCelsius = 39;
+	maxTempWindowCelsius = 49;
         autoset_cpu_gpu();
     }
     
