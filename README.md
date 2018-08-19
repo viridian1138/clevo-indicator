@@ -1,7 +1,7 @@
 Clevo Fan Control Indicator for Ubuntu
 ======================================
 
-This program is an Ubuntu indicator to control the fan of Clevo laptops, using reversed-engineering port information from ECView.
+This program is an Ubuntu indicator to control the fan of Clevo laptops (such as System76 Oryx Pro 2018), using reversed-engineering port information from ECView.
 
 It shows the CPU temperature on the left and the GPU temperature on the right, and a menu for manual control.
 
