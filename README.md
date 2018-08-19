@@ -25,7 +25,7 @@ make install
 Auto-Mode
 ---------
 
-Several automatic modes exist to auto-control the fan speed based on temperature.  All of them rely on nvidia-smi to provide a stream of GPU temperature values for determination of desired fan speeds.  The "auto" mode provides a default fan control that usually keeps temperature somewhere between 40 degrees celsius and 90 degrees celsius.  The "autoHot" mode Stays quiet until close to temperature limit, and then switches on.  WARNING: "autoHot" can be quieter, but can also cause the bottom of the laptop to become scalding-hot.  The "autoCool" mode attempts to keep laptop cool enough that you can keep it on your lap.  Intended commands using the various automatic modes are as follows:
+Several automatic modes exist to auto-control the fan speed based on temperature.  All of them rely on nvidia-smi to provide a stream of GPU temperature values for determination of desired fan speeds.  The "auto" mode provides a default fan control that usually keeps temperature somewhere between 40 degrees celsius and 90 degrees celsius.  The "autoHot" mode stays quiet until close to temperature limit, and then switches on.  WARNING: "autoHot" can be quieter, but can also cause the bottom of the laptop to become scalding-hot.  The "autoCool" mode attempts to keep laptop cool enough that you can keep it on your lap.  Intended commands using the various automatic modes are as follows:
 
 
 ```/opt/bin/nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader -l 3 | /home/qon/scripts/clevo-indicator auto```
